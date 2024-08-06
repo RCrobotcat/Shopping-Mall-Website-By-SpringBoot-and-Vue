@@ -17,8 +17,16 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="goodsName" label="商品名称" width="350px"></el-table-column>
-              <el-table-column prop="businessName" label="店铺名称"></el-table-column>
+              <el-table-column prop="goodsName" label="商品名称" width="350px">
+                <template v-slot="scope">
+                  <a href="#" @click="navTo('/front/detail?id=' + scope.row.goodsId)">{{ scope.row.goodsName }}</a>
+                </template>
+              </el-table-column>
+              <el-table-column prop="businessName" label="店铺名称">
+                <template v-slot="scope">
+                  <a href="#" @click="navTo('/front/business?id=' + scope.row.businessId)">{{ scope.row.businessName }}</a>
+                </template>
+              </el-table-column>
               <el-table-column prop="goodsPrice" label="商品价格"></el-table-column>
               <el-table-column label="操作" align="center" width="180">
                 <template v-slot="scope">
