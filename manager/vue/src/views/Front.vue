@@ -1,6 +1,6 @@
 <template>
   <div>
-<!--    <div class="front-notice"><i class="el-icon-bell" style="margin-right: 2px"></i>公告：{{ top }}</div>-->
+    <!--    <div class="front-notice"><i class="el-icon-bell" style="margin-right: 2px"></i>公告：{{ top }}</div>-->
     <!--头部-->
     <div class="front-header">
       <div class="front-header-left" @click="navTo('/front/home')">
@@ -10,8 +10,8 @@
       <div class="front-header-center">
         <div class="front-header-nav">
           <el-menu :default-active="$route.path" mode="horizontal" router>
-						<el-menu-item index="/front/home">首页</el-menu-item>
-						<el-menu-item index="/front/person">个人中心</el-menu-item>
+            <el-menu-item index="/front/home">首页</el-menu-item>
+            <el-menu-item index="/front/person">个人中心</el-menu-item>
           </el-menu>
         </div>
       </div>
@@ -36,6 +36,9 @@
                 <div style="text-decoration: none" @click="navTo('/front/address')">我的地址</div>
               </el-dropdown-item>
               <el-dropdown-item>
+                <div style="text-decoration: none" @click="navTo('/front/cart')">我的购物车</div>
+              </el-dropdown-item>
+              <el-dropdown-item>
                 <div style="text-decoration: none" @click="logout">退出</div>
               </el-dropdown-item>
             </el-dropdown-menu>
@@ -45,7 +48,7 @@
     </div>
     <!--主体-->
     <div class="main-body">
-      <router-view ref="child" @update:user="updateUser" />
+      <router-view ref="child" @update:user="updateUser"/>
     </div>
   </div>
 
@@ -56,7 +59,7 @@
 export default {
   name: "FrontLayout",
 
-  data () {
+  data() {
     return {
       top: '',
       notice: [],
@@ -101,5 +104,5 @@ export default {
 </script>
 
 <style scoped>
-  @import "@/assets/css/front.css";
+@import "@/assets/css/front.css";
 </style>

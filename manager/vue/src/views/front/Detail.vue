@@ -25,7 +25,7 @@
                                                                      @click="navTo('/front/type?id=' + goodsData.typeId)">
               {{ goodsData.typeName }} </a></div>
             <div style="color: #666666FF; margin-top: 20px;">
-              <el-button type="warning">加入购物车</el-button>
+              <el-button type="warning" @click="addCart()">加入购物车</el-button>
               <el-button type="warning" @click="collectGoods()">收藏商品</el-button>
             </div>
           </el-col>
@@ -87,6 +87,16 @@ export default {
       this.$request.post('collect/add', data).then(res => {
         if (res.code === '200') {
           this.$message.success('收藏成功')
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
+    addCart() {
+      let data = {num: 1, userId: this.user.id, goodsId: this.goodsId, businessId: this.goodsData.businessId}
+      this.$request.post('/cart/add', data).then(res => {
+        if (res.code === '200') {
+          this.$message.success('加入购物车成功')
         } else {
           this.$message.error(res.msg)
         }

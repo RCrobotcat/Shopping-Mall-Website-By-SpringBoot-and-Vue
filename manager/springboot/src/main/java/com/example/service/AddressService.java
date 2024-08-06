@@ -62,6 +62,10 @@ public class AddressService {
      * 查询所有
      */
     public List<Address> selectAll(Address address) {
+        Account currentUser = TokenUtils.getCurrentUser();
+        if(RoleEnum.USER.name().equals(currentUser.getRole())){
+            address.setUserId(currentUser.getId());
+        }
         return addressMapper.selectAll(address);
     }
 
