@@ -84,6 +84,10 @@ public class GoodsService {
         return goodsMapper.selectByBusinessId(id);
     }
 
+    public List<Goods> selectByName(String name){
+        return goodsMapper.selectByName(name);
+    }
+
     /**
      * 分页查询
      */

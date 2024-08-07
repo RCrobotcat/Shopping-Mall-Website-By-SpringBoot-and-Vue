@@ -88,6 +88,12 @@ public class GoodsController {
         return Result.success(list);
     }
 
+    @GetMapping("/selectByName")
+    public Result SelectByName(@RequestParam String name) {
+        List<Goods> list = goodsService.selectByName(name);
+        return Result.success(list);
+    }
+
     @GetMapping("/selectByBusinessId")
     public Result SelectByBusinessId(@RequestParam Integer id) {
         List<Goods> list = goodsService.selectByBusinessId(id);

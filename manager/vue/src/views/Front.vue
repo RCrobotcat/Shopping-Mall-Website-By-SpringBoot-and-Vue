@@ -7,13 +7,15 @@
         <img src="@/assets/imgs/shoppingMall.png" alt="">
         <div class="title">简易的购物商城项目</div>
       </div>
-      <div class="front-header-center">
-        <div class="front-header-nav">
-          <el-menu :default-active="$route.path" mode="horizontal" router>
-            <el-menu-item index="/front/home">首页</el-menu-item>
-            <el-menu-item index="/front/person">个人中心</el-menu-item>
-          </el-menu>
-        </div>
+      <div class="front-header-center" style="text-align: right; margin-right: 20px;">
+        <!--        <div class="front-header-nav">-->
+        <!--          <el-menu :default-active="$route.path" mode="horizontal" router>-->
+        <!--            <el-menu-item index="/front/home">首页</el-menu-item>-->
+        <!--            <el-menu-item index="/front/person">个人中心</el-menu-item>-->
+        <!--          </el-menu>-->
+        <!--        </div>-->
+        <el-input style="width: 250px;" placeholder="请输入商品名称搜索" v-model="searchData"></el-input>
+        <el-button type="primary" plain style="margin-left: 5px;" @click="search()">搜索</el-button>
       </div>
       <div class="front-header-right">
         <div v-if="!user.username">
@@ -67,6 +69,7 @@ export default {
       top: '',
       notice: [],
       user: JSON.parse(localStorage.getItem("xm-user") || '{}'),
+      searchData: null,
     }
   },
 
@@ -100,9 +103,12 @@ export default {
     },
     navTo(path) {
       location.href = path
+    },
+    search() {
+      let searchData = this.searchData ? this.searchData : ''
+      location.href = '/front/search?searchData=' + searchData
     }
   }
-
 }
 </script>
 
