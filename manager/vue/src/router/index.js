@@ -42,6 +42,7 @@ const routes = [
       { path: 'collect', name: 'Collect', meta: { name: '收藏信息' }, component: () => import('../views/front/Collect') },
       { path: 'address', name: 'Address', meta: { name: '地址信息' }, component: () => import('../views/front/Address') },
       { path: 'cart', name: 'Cart', meta: { name: '购物车信息' }, component: () => import('../views/front/Cart') },
+      { path: 'orders', name: 'Orders', meta: { name: '订单信息' }, component: () => import('../views/front/Orders') },
     ]
   },
   { path: '/login', name: 'Login', meta: { name: '登录' }, component: () => import('../views/Login.vue') },

@@ -83,8 +83,10 @@
               </div>
               <div style="flex: 1; text-align: center">
                 <div>
-                  <img src="@/assets/imgs/订单.png" alt="" style="height: 25px; width: 25px;">
-                  <div>我的订单</div>
+                  <a href="#" @click="navTo('/front/orders')">
+                    <img src="@/assets/imgs/订单.png" alt="" style="height: 25px; width: 25px;">
+                    <div>我的订单</div>
+                  </a>
                 </div>
               </div>
             </div>

@@ -7,11 +7,14 @@
           <div style="margin-left: 20px; flex: 1;">购物车（共 {{ goodsData.length }} 件）</div>
           <div style="flex: 2; text-align: right;">
             <el-select v-model="addressId" placeholder="请选择收货地址" style="width: 70%;">
-              <el-option v-for="item in addressData" :label="item.username + ' - ' + item.useraddress + ' - ' + item.phone" :value="item.id"></el-option>
+              <el-option v-for="item in addressData"
+                         :label="item.username + ' - ' + item.useraddress + ' - ' + item.phone"
+                         :value="item.id"></el-option>
             </el-select>
           </div>
           <div style="flex: 1; font-size: 16px; text-align: right; padding-right: 20px;">
-            已选商品 ¥ {{ totalPrice }} <el-button type="warning" round style="margin-left: 10px;">下单</el-button>
+            已选商品 <span style="color: coral; font-size: 20px;">¥ {{ totalPrice }}</span>
+            <el-button type="warning" round style="margin-left: 10px;" @click="pay()">下单</el-button>
           </div>
         </div>
         <div style="margin: 20px 0; padding: 0 50px;">
@@ -33,7 +36,9 @@
               </el-table-column>
               <el-table-column prop="businessName" label="店铺">
                 <template v-slot="scope">
-                  <a href="#" @click="navTo('/front/business?id=' + scope.row.businessId)">{{scope.row.businessName }}</a>
+                  <a href="#" @click="navTo('/front/business?id=' + scope.row.businessId)">{{
+                      scope.row.businessName
+                    }}</a>
                 </template>
               </el-table-column>
               <el-table-column prop="goodsPrice" label="商品价格">
@@ -84,6 +89,7 @@ export default {
       pageSize: 10,  // 每页显示的个数
       total: 0,
       addressData: [],
+      addressId: null,
       totalPrice: 0,
       selectedData: [],
     }
@@ -150,6 +156,30 @@ export default {
       // 计算总价
       this.selectedData.forEach(item => {
         this.totalPrice += item.goodsPrice * item.num
+      })
+    },
+    pay() {
+      if (!this.addressId) {
+        this.$message.warning('请先选择收货地址')
+        return;
+      }
+      if (!this.selectedData || this.selectedData.length === 0) {
+        this.$message.warning('请先选择商品')
+        return;
+      }
+      let data = {
+        userId: this.user.id,
+        addressId: this.addressId,
+        status: '待发货',
+        cartData: this.selectedData
+      }
+      this.$request.post('/orders/add', data).then(res => {
+        if (res.code === '200') {
+          this.$message.success('下单成功')
+          this.loadGoods(1)
+        } else {
+          this.$message.error(res.msg)
+        }
       })
     },
   }

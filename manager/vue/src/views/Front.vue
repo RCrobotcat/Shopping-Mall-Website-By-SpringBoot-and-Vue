@@ -39,6 +39,9 @@
                 <div style="text-decoration: none" @click="navTo('/front/cart')">我的购物车</div>
               </el-dropdown-item>
               <el-dropdown-item>
+                <div style="text-decoration: none" @click="navTo('/front/orders')">我的订单</div>
+              </el-dropdown-item>
+              <el-dropdown-item>
                 <div style="text-decoration: none" @click="logout">退出</div>
               </el-dropdown-item>
             </el-dropdown-menu>
