@@ -51,7 +51,8 @@
               <el-table-column prop="status" label="订单状态"></el-table-column>
               <el-table-column label="操作" align="center" width="200">
                 <template v-slot="scope">
-                  <el-button size="mini" type="success" plain v-if="scope.row.status === '商家已发货, 待收货'" @click="goodsConfirm(scope.row, '已收货')">确认收货</el-button>
+                  <el-button size="mini" type="success" plain v-if="scope.row.status === '商家已发货, 待收货'" @click="updateStatus(scope.row, '订单已完成')">确认收货</el-button>
+                  <el-button size="mini" type="warning" plain v-if="scope.row.status === '订单已完成'" @click="addComment(scope.row)">评价商品</el-button>
                   <el-button size="mini" type="danger" plain @click="del(scope.row.id)">取消订单</el-button>
                 </template>
               </el-table-column>
@@ -72,6 +73,20 @@
         </div>
       </div>
     </div>
+
+    <el-dialog title="请输入评价内容" :visible.sync="fromVisible" width="40%" :close-on-click-modal="false" destroy-on-close>
+      <el-form :model="form" label-width="100px" style="padding-right: 50px" :rules="rules" ref="formRef">
+        <el-form-item label="评价内容" prop="content">
+          <el-input type="textarea" v-model="form.content" placeholder="评价"></el-input>
+        </el-form-item>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="fromVisible = false">取 消</el-button>
+        <el-button type="primary" @click="save">确 定</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -87,6 +102,7 @@ export default {
       pageSize: 10,  // 每页显示的个数
       total: 0,
       form: {},
+      fromVisible: false,
     }
   },
   mounted() {
@@ -130,25 +146,39 @@ export default {
       this.loadOrders(pageNum)
     },
     save() {   // 保存触发的逻辑  它会触发新增或者更新
-      this.$request({
-        url: this.form.id ? '/orders/update' : '/orders/add',
-        method: this.form.id ? 'PUT' : 'POST',
-        data: this.form
-      }).then(res => {
-        if (res.code === '200') {  // 表示成功保存
-          this.$message.success('保存成功')
-          this.loadOrders(1)
-          this.fromVisible = false
+      let data = {
+        userId: this.user.id,
+        businessId: this.form.businessId,
+        goodsId: this.form.goodsId,
+        content: this.form.content,
+      }
+      this.$request.post('/comment/add', data).then(res => {
+        if (res.code === '200') {
+          this.$message.success('评价成功')
+          this.fromVisible = false;
+          this.updateStatus(this.form, '已评价')
+          this.form = {}
         } else {
-          this.$message.error(res.msg)  // 弹出错误的信息
+          this.$message.error(res.msg)
         }
       })
     },
-    goodsConfirm(row, status){
+    updateStatus(row, status){
       this.form = row;
       this.form.status = status;
-      this.save();
+      this.$request.put('/orders/update', this.form).then(res=>{
+        if (res.code === '200') {
+          this.$message.success('操作成功')
+          this.loadOrders(1)
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
     },
+    addComment(row){
+      this.fromVisible = true;
+      this.form = row;
+    }
   }
 }
 </script>
