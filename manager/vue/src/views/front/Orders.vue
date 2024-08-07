@@ -17,11 +17,7 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="ordersId" label="订单编号">
-                <template v-slot="scope">
-                  <a href="#" @click="navTo('/front/detail?id=' + scope.row.goodsId)">{{ scope.row.ordersId }}</a>
-                </template>
-              </el-table-column>
+              <el-table-column prop="ordersId" label="订单编号"></el-table-column>
               <el-table-column prop="goodsName" label="商品名称" :show-overflow-tooltip="true">
                 <template v-slot="scope">
                   <a href="#" @click="navTo('/front/detail?id=' + scope.row.goodsId)">
@@ -29,9 +25,9 @@
                   </a>
                 </template>
               </el-table-column>
-              <el-table-column prop="businessName" label="店铺名称">
+              <el-table-column prop="businessName" label="店铺名称" :show-overflow-tooltip="true">
                 <template v-slot="scope">
-                  <a href="#" @click="navTo('/front/business?id=' + scope.row.businessId)">{{scope.row.businessName }}</a>
+                  <a href="#" @click="navTo('/front/business?id=' + scope.row.businessId)">{{ scope.row.businessName }}</a>
                 </template>
               </el-table-column>
               <el-table-column prop="goodsPrice" label="商品单价">
@@ -49,28 +45,13 @@
                   <span>￥{{ scope.row.price }}</span>
                 </template>
               </el-table-column>
-              <el-table-column prop="goodsPrice" label="收货人">
+              <el-table-column prop="username" label="收货人" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column prop="useraddress" label="收货地址" :show-overflow-tooltip="true"></el-table-column>
+              <el-table-column prop="phone" label="联系电话"></el-table-column>
+              <el-table-column prop="status" label="订单状态"></el-table-column>
+              <el-table-column label="操作" align="center" width="200">
                 <template v-slot="scope">
-                  <span>{{ scope.row.username }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column prop="goodsPrice" label="收货地址">
-                <template v-slot="scope">
-                  <span>{{ scope.row.useraddress }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column prop="goodsPrice" label="联系电话">
-                <template v-slot="scope">
-                  <span>{{ scope.row.phone }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column prop="goodsPrice" label="订单状态">
-                <template v-slot="scope">
-                  <span>{{ scope.row.status }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" align="center" width="180">
-                <template v-slot="scope">
+                  <el-button size="mini" type="success" plain v-if="scope.row.status === '商家已发货, 待收货'" @click="goodsConfirm(scope.row, '已收货')">确认收货</el-button>
                   <el-button size="mini" type="danger" plain @click="del(scope.row.id)">取消订单</el-button>
                 </template>
               </el-table-column>
@@ -105,6 +86,7 @@ export default {
       pageNum: 1,   // 当前的页码
       pageSize: 10,  // 每页显示的个数
       total: 0,
+      form: {},
     }
   },
   mounted() {
@@ -146,6 +128,26 @@ export default {
     },
     handleCurrentChange(pageNum) {
       this.loadOrders(pageNum)
+    },
+    save() {   // 保存触发的逻辑  它会触发新增或者更新
+      this.$request({
+        url: this.form.id ? '/orders/update' : '/orders/add',
+        method: this.form.id ? 'PUT' : 'POST',
+        data: this.form
+      }).then(res => {
+        if (res.code === '200') {  // 表示成功保存
+          this.$message.success('保存成功')
+          this.loadOrders(1)
+          this.fromVisible = false
+        } else {
+          this.$message.error(res.msg)  // 弹出错误的信息
+        }
+      })
+    },
+    goodsConfirm(row, status){
+      this.form = row;
+      this.form.status = status;
+      this.save();
     },
   }
 }

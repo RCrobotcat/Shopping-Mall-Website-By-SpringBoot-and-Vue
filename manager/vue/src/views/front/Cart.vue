@@ -14,7 +14,7 @@
           </div>
           <div style="flex: 1; font-size: 16px; text-align: right; padding-right: 20px;">
             已选商品 <span style="color: coral; font-size: 20px;">¥ {{ totalPrice }}</span>
-            <el-button type="warning" round style="margin-left: 10px;" @click="pay()">下单</el-button>
+            <el-button type="warning" round style="margin-left: 10px;" @click="QRPayWidget()">下单</el-button>
           </div>
         </div>
         <div style="margin: 20px 0; padding: 0 50px;">
@@ -36,9 +36,7 @@
               </el-table-column>
               <el-table-column prop="businessName" label="店铺">
                 <template v-slot="scope">
-                  <a href="#" @click="navTo('/front/business?id=' + scope.row.businessId)">{{
-                      scope.row.businessName
-                    }}</a>
+                  <a href="#" @click="navTo('/front/business?id=' + scope.row.businessId)">{{ scope.row.businessName }}</a>
                 </template>
               </el-table-column>
               <el-table-column prop="goodsPrice" label="商品价格">
@@ -74,6 +72,16 @@
         </div>
       </div>
     </div>
+
+    <el-dialog title="付款二维码" :visible.sync="QRCodeVisible" width="40%" :close-on-click-modal="false"
+               destroy-on-close>
+      <img src="@/assets/imgs/pay.jpg" alt="" style="width: 700px; height: 1000px;">
+      <div slot="footer" class="dialog-footer">
+        <el-button type="success" @click="pay()">付款完成</el-button>
+        <el-button @click="QRCodeVisible = false">放弃支付</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -92,6 +100,7 @@ export default {
       addressId: null,
       totalPrice: 0,
       selectedData: [],
+      QRCodeVisible: false,
     }
   },
   mounted() {
@@ -159,14 +168,15 @@ export default {
       })
     },
     pay() {
-      if (!this.addressId) {
-        this.$message.warning('请先选择收货地址')
-        return;
-      }
-      if (!this.selectedData || this.selectedData.length === 0) {
-        this.$message.warning('请先选择商品')
-        return;
-      }
+      this.QRCodeVisible = false;
+      // if (!this.addressId) {
+      //   this.$message.warning('请先选择收货地址')
+      //   return;
+      // }
+      // if (!this.selectedData || this.selectedData.length === 0) {
+      //   this.$message.warning('请先选择商品')
+      //   return;
+      // }
       let data = {
         userId: this.user.id,
         addressId: this.addressId,
@@ -182,6 +192,17 @@ export default {
         }
       })
     },
+    QRPayWidget() {
+      if (!this.addressId) {
+        this.$message.warning('请先选择收货地址')
+        return;
+      }
+      if (!this.selectedData || this.selectedData.length === 0) {
+        this.$message.warning('请先选择商品')
+        return;
+      }
+      this.QRCodeVisible = true
+    }
   }
 }
 </script>

@@ -20,7 +20,7 @@
             <if test="ordersId != null"> and orders_id= #{ordersId}</if>
             <if test="userId != null"> and orders.user_id= #{userId}</if>
             <if test="goodsId != null"> and goods_id= #{goodsId}</if>
-            <if test="businessId != null"> and business_id= #{businessId}</if>
+            <if test="businessId != null"> and orders.business_id= #{businessId}</if>
             <if test="addressId != null"> and address_id= #{addressId}</if>
             <if test="num != null"> and num= #{num}</if>
             <if test="price != null"> and price= #{price}</if>

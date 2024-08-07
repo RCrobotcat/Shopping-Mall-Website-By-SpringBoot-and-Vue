@@ -92,6 +92,9 @@ public class OrdersService {
         if (RoleEnum.USER.name().equals(currentUser.getRole())) {
             orders.setUserId(currentUser.getId());
         }
+        if (RoleEnum.BUSINESS.name().equals(currentUser.getRole())) {
+            orders.setBusinessId(currentUser.getId());
+        }
         PageHelper.startPage(pageNum, pageSize);
         List<Orders> list = ordersMapper.selectAll(orders);
         return PageInfo.of(list);
