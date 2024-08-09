@@ -194,15 +194,15 @@ public class GoodsService {
                     .filter(x -> x.getId().equals(goodsId)).findFirst().orElse(null)).limit(10).collect(Collectors.toList());
         }
 
-//        if (CollectionUtil.isEmpty(recommendGoods)) {
-//            // 随机给它推荐10个
-//            return getRandomGoods(10);
-//        }
-//        if (recommendGoods.size() < 10) {
-//            int num = 10 - recommendGoods.size();
-//            List<Goods> list = getRandomGoods(num);
-//            recommendGoods.addAll(list);
-//        }
+        if (CollectionUtil.isEmpty(recommendGoods)) {
+            // 随机给它推荐10个
+            return getRandomGoods(10);
+        }
+        if (recommendGoods.size() < 10) {
+            int num = 10 - recommendGoods.size();
+            List<Goods> list = getRandomGoods(num);
+            recommendGoods.addAll(list);
+        }
 
         return recommendGoods;
     }
