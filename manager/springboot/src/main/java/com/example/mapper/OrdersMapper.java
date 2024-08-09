@@ -38,4 +38,7 @@ public interface OrdersMapper {
 
     @Select("select * from orders where user_id = #{userId} and goods_id = #{goodsId}")
     Orders selectByUserIdAndGoodsId(@Param("userId") Integer userId, @Param("goodsId") Integer goodsId);
+
+    @Select("select * from orders where status = '已评价' or status = '订单已完成'")
+    List<Orders> selectAllCompleteOrders();
 }

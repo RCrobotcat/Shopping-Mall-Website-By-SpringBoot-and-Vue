@@ -4,13 +4,16 @@ import cn.hutool.core.date.DateUtil;
 import com.example.common.enums.RoleEnum;
 import com.example.entity.Account;
 import com.example.entity.Cart;
+import com.example.entity.Goods;
 import com.example.entity.Orders;
 import com.example.mapper.CartMapper;
+import com.example.mapper.GoodsMapper;
 import com.example.mapper.OrdersMapper;
 import com.example.utils.TokenUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -27,6 +30,10 @@ public class OrdersService {
     private OrdersMapper ordersMapper;
     @Resource
     private CartMapper cartMapper;
+    @Resource
+    private GoodsService goodsService;
+    @Autowired
+    private GoodsMapper goodsMapper;
 
     /**
      * 新增
@@ -44,6 +51,11 @@ public class OrdersService {
 
             // 把购物车对应的商品删除
             cartMapper.deleteById(cart.getId());
+
+            // 增加商品销量
+            Goods goods = goodsService.selectById(cart.getGoodsId());
+            goods.setCount(goods.getCount() + cart.getNum());
+            goodsMapper.updateById(goods);
         }
     }
 

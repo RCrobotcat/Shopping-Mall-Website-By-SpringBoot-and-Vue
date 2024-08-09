@@ -68,7 +68,7 @@ public class GoodsController {
      * 查询所有
      */
     @GetMapping("/selectAll")
-    public Result selectAll(Goods goods ) {
+    public Result selectAll(Goods goods) {
         List<Goods> list = goodsService.selectAll(goods);
         return Result.success(list);
     }
@@ -97,6 +97,13 @@ public class GoodsController {
     @GetMapping("/selectByBusinessId")
     public Result SelectByBusinessId(@RequestParam Integer id) {
         List<Goods> list = goodsService.selectByBusinessId(id);
+        return Result.success(list);
+    }
+
+    // 得到推荐商品(利用协同过滤算法)
+    @GetMapping("/selectRecommend")
+    public Result selectRecommend() {
+        List<Goods> list = goodsService.selectRecommend();
         return Result.success(list);
     }
 
