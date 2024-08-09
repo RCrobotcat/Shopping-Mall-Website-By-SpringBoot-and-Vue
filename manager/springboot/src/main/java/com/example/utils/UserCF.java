@@ -35,6 +35,7 @@ public class UserCF {
             return Collections.emptyList();
         }
         // 最近邻用户看过商品列表
+        // RelateDTO::getGoodsId相当于e -> e.getGoodsId()
         List<Integer> neighborItems = userMap.get(nearestUserId).stream().map(RelateDTO::getGoodsId).collect(Collectors.toList());
         // 指定用户看过商品列表
         List<Integer> userItems = userMap.get(userId).stream().map(RelateDTO::getGoodsId).collect(Collectors.toList());
