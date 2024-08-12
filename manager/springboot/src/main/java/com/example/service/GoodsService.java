@@ -12,10 +12,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -196,26 +193,42 @@ public class GoodsService {
 
         if (CollectionUtil.isEmpty(recommendGoods)) {
             // 随机给它推荐10个
-            return getRandomGoods(10);
+            return getRandomGoods(10, recommendGoods);
         }
         if (recommendGoods.size() < 10) {
             int num = 10 - recommendGoods.size();
-            List<Goods> list = getRandomGoods(num);
+            List<Goods> list = getRandomGoods(num, recommendGoods);
             recommendGoods.addAll(list);
         }
-
         return recommendGoods;
     }
 
-    private List<Goods> getRandomGoods(int num) {
+    private List<Goods> getRandomGoods(int num, List<Goods> recommendGoods) {
         List<Goods> list = new ArrayList<>(num);
         List<Goods> goods = goodsMapper.selectAll(null);
-        for (int i = 0; i < num; i++) {
-            int index = new Random().nextInt(goods.size());
-            list.add(goods.get(index));
+        List<Integer> recommendGoodsIds = recommendGoods.stream()
+                .map(Goods::getId)  // 使用 map 方法从推荐商品中提取所有ID
+                .collect(Collectors.toList());
+        Set<Integer> selectedIndices = new HashSet<>(); // 使用 HashSet 来存储已选的下标
+
+        while (list.size() < num) {
+            int index = new Random().nextInt(goods.size()) + 1;
+            Goods selectedGoods = new Goods();
+            for (Goods g : goods) {
+                if (g.getId().equals(index)) {
+                    selectedGoods = g;
+                    break;
+                }
+            }
+            // 检查商品ID是否已经被推荐或已选
+            if (!recommendGoodsIds.contains(selectedGoods.getId()) && !selectedIndices.contains(index)) {
+                list.add(selectedGoods);
+                selectedIndices.add(index); // 记录下标以避免重复选择
+            }
         }
         return list;
     }
+
 
     /**
      * 分页查询

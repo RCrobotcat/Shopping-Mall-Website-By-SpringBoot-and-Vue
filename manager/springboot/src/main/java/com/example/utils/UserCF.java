@@ -3,10 +3,7 @@ package com.example.utils;
 import cn.hutool.core.collection.CollectionUtil;
 import com.example.entity.RelateDTO;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class UserCF {
