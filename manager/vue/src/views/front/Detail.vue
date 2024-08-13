@@ -36,6 +36,7 @@
           </el-tab-pane>
           <el-tab-pane label="商品评价" name="second">
             <div style="margin-top: 10px;">
+              <div v-if="commentData.length === 0" style="color: #7A7A7AFF; font-size: 20px; text-align: center; margin-top: 50px;">暂无评论</div>
               <div style="margin-top: 20px;" v-for="item in commentData">
                 <div style="display: flex;">
                   <div style="width: 40px;">
